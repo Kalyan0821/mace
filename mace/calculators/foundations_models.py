@@ -22,6 +22,7 @@ def mace_mp(
     dispersion: bool = False,
     dispersion_xc="pbe",
     dispersion_cutoff=40.0 * units.Bohr,
+    verbose=True,
     **kwargs,
 ) -> MACECalculator:
     """
@@ -95,15 +96,17 @@ def mace_mp(
 
     device = device or ("cuda" if torch.cuda.is_available() else "cpu")
     if default_dtype == "float64":
-        print(
-            "Using float64 for MACECalculator, which is slower but more accurate. Recommended for geometry optimization."
-        )
+        if verbose:
+            print(
+                "Using float64 for MACECalculator, which is slower but more accurate. Recommended for geometry optimization."
+            )
     if default_dtype == "float32":
-        print(
-            "Using float32 for MACECalculator, which is faster but less accurate. Recommended for MD. Use float64 for geometry optimization."
-        )
+        if verbose:
+            print(
+                "Using float32 for MACECalculator, which is faster but less accurate. Recommended for MD. Use float64 for geometry optimization."
+            )
     mace_calc = MACECalculator(
-        model_paths=model, device=device, default_dtype=default_dtype, **kwargs
+        model_paths=model, device=device, default_dtype=default_dtype, verbose=verbose, **kwargs
     )
     if dispersion:
         gh_url = "https://github.com/pfnet-research/torch-dftd"

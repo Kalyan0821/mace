@@ -54,6 +54,7 @@ class MACECalculator(Calculator):
         default_dtype="",
         charges_key="Qs",
         model_type="MACE",
+        verbose=True,
         **kwargs,
     ):
         Calculator.__init__(self, **kwargs)
@@ -135,9 +136,10 @@ class MACECalculator(Calculator):
             )
             default_dtype = model_dtype
         if model_dtype != default_dtype:
-            print(
-                f"Default dtype {default_dtype} does not match model dtype {model_dtype}, converting models to {default_dtype}."
-            )
+            if verbose:
+                print(
+                    f"Default dtype {default_dtype} does not match model dtype {model_dtype}, converting models to {default_dtype}."
+                )
             if default_dtype == "float64":
                 self.models = [model.double() for model in self.models]
             elif default_dtype == "float32":
