@@ -54,9 +54,10 @@ def mace_mp(
     """
     if model in (None, "medium") and os.path.isfile(local_model_path):
         model = local_model_path
-        print(
-            f"Using local medium Materials Project MACE model for MACECalculator {model}"
-        )
+        if verbose:
+            print(
+                f"Using local medium Materials Project MACE model for MACECalculator {model}"
+            )
     elif model in (None, "small", "medium", "large") or str(model).startswith("https:"):
         try:
             urls = dict(
