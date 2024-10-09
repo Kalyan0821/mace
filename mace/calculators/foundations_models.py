@@ -138,6 +138,7 @@ def mace_off(
     device: str = "",
     default_dtype: str = "float64",
     return_raw_model: bool = False,
+    verbose=True,
     **kwargs,
 ) -> MACECalculator:
     """
@@ -186,7 +187,8 @@ def mace_off(
             print(f"Cached MACE model to {cached_model_path}")
         model = cached_model_path
         msg = f"Using MACE-OFF23 MODEL for MACECalculator with {model}"
-        print(msg)
+        if verbose:
+            print(msg)
     except Exception as exc:
         raise RuntimeError("Model download failed") from exc
 
@@ -196,13 +198,15 @@ def mace_off(
         return torch.load(model, map_location=device)
 
     if default_dtype == "float64":
-        print(
-            "Using float64 for MACECalculator, which is slower but more accurate. Recommended for geometry optimization."
-        )
+        if verbose:
+            print(
+                "Using float64 for MACECalculator, which is slower but more accurate. Recommended for geometry optimization."
+            )
     if default_dtype == "float32":
-        print(
-            "Using float32 for MACECalculator, which is faster but less accurate. Recommended for MD. Use float64 for geometry optimization."
-        )
+        if verbose:
+            print(
+                "Using float32 for MACECalculator, which is faster but less accurate. Recommended for MD. Use float64 for geometry optimization."
+            )
     mace_calc = MACECalculator(
         model_paths=model, device=device, default_dtype=default_dtype, **kwargs
     )
