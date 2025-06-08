@@ -89,7 +89,8 @@ def mace_mp(
                 print(f"Cached MACE model to {cached_model_path}")
             model = cached_model_path
             msg = f"Using Materials Project MACE for MACECalculator with {model}"
-            print(msg)
+            if verbose:
+                print(msg)
         except Exception as exc:
             raise RuntimeError(
                 "Model download failed and no local model found"
